@@ -176,6 +176,36 @@ public class CourseController {
     }
 
     @Data
+    static class TitleData {
+        private String title = "";
+        private int title_size = 1;
+        private String icon = "";
+        private String icon_color = "";
+    }
+    /**
+     * Endpoint k vytvoreni noveho obsahu typu nadpis.
+     * @param token autorizacni token
+     * @param data data v prislusnem formatu
+     * @param idCourse ID kurzu, kteremu bude obsah prirazen
+     * @return vraci nove vytvoreny zaznam nebo chybu
+     */
+    @PostMapping("/{id}/new/title")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Content newContentTitle(Principal token, @RequestBody TitleData data, @PathVariable(value="id") int idCourse){
+
+        int status = courseService.newContentTitle(token.getName(), data, idCourse);
+
+        if (status == -1)
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do have not permission!");
+        else if (status == -2)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found");
+        else if (status == -3)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Type not found!");
+        else
+            return courseService.getContentById(status);
+    }
+
+    @Data
     static class ListData {
         private String title = "";
         private String description = "";

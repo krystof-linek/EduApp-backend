@@ -88,6 +88,15 @@ public class TestService {
     }
 
     /**
+     * Funkce nacte vsechny aktivni testy pro konkretni předmět.
+     * @param id id předmětu
+     * @return vraci list zaznamu prislusnych testu
+     */
+    protected List<Test> getAllActiveTestsBySubjectId(int id) {
+        return testRepository.findAllBySubject_IdSubjectAndActiveAndOld(id, true, false);
+    }
+
+    /**
      * Funkce vrati vsechny testy, u kterych je uzivatel autorem
      * @param token = autorizacni token
      * @return vraci list zaznamu
@@ -244,4 +253,5 @@ public class TestService {
 
         return testRepository.save(test).getId();
     }
+
 }

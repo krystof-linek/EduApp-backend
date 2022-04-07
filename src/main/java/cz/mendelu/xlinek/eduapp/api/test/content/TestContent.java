@@ -19,7 +19,7 @@ public class TestContent {
     private long id;
     @Column(name = "picture")
     private String picture;
-    @Column(name = "text")
+    @Column(name = "text", columnDefinition = "TEXT")
     private String text;
     @Column(name = "equation")
     private String equation;

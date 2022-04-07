@@ -1,7 +1,5 @@
 package cz.mendelu.xlinek.eduapp.api.test.record;
 
-import cz.mendelu.xlinek.eduapp.api.test.Test;
-import cz.mendelu.xlinek.eduapp.api.test.TestController;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,10 +31,16 @@ public class RecordTestController {
 
     /* ---- GET METHODS ---- */
 
-    @GetMapping("/get/by/id/{id}") //neni dodelano ==> zadne overeni prav
+    @GetMapping("/get/my/by/id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public RecordTest getActiveSafeTestById(@PathVariable(value="id") long id){
-        return recordTestService.getRecordTestById(id);
+    public RecordTest getRecordTestById(Principal token, @PathVariable(value="id") long id_record){
+
+        long status = recordTestService.isAutorOfRecord(token.getName(), id_record);
+
+        if (status != 0){
+            throw myResponseEx(status);
+        } else
+            return recordTestService.getRecordTestById(id_record);
     }
 
     /* ---- POST METHODS ---- */
@@ -63,14 +67,19 @@ public class RecordTestController {
         private long id_answer = -1;
         private boolean selectedValue = false;
     }
-
     @Data
     static class UpdateRecordTestData {
         private long id_record = -1;
         List<RecordAnswerData> recordAnswerData = new ArrayList<>();
     }
-
-    @PostMapping("/save/answers")
+    /**
+     * Tento endpoint slouzi k zpracovani výsledků testu.
+     * Do listu se ukládají pouze chybně odpovězené odpovědi.
+     * @param token autorizacni token
+     * @param data data ke zpracování
+     * @return vrací patřičný záznam o výsledku
+     */
+    @PostMapping("/check/answers")
     @ResponseStatus(HttpStatus.CREATED)
     public RecordTest updateRecordTest(Principal token, @RequestBody UpdateRecordTestData data){
         long status = recordTestService.updateRecordTest(token.getName(), data);

@@ -2,6 +2,7 @@ package cz.mendelu.xlinek.eduapp.api.test.record;
 
 import cz.mendelu.xlinek.eduapp.api.test.Test;
 import cz.mendelu.xlinek.eduapp.api.test.TestRepository;
+import cz.mendelu.xlinek.eduapp.api.test.answer.Answer;
 import cz.mendelu.xlinek.eduapp.api.test.answer.AnswerRepository;
 import cz.mendelu.xlinek.eduapp.api.user.User;
 import cz.mendelu.xlinek.eduapp.api.user.UserRepository;
@@ -11,15 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 class RecordTestService {
     @Autowired
     RecordTestRepository recordTestRepository;
-    @Autowired
-    RecordAnswerRepository recordAnswerRepository;
 
     @Autowired
     TestRepository testRepository;
@@ -40,6 +37,29 @@ class RecordTestService {
     }
 
     /* ---- SELECT ---- */
+
+    /**
+     * Zkontroluje, jestli je uzivatel autor daneho zaznamu dle ID zaznamu testu.
+     * @param token autorizacni token
+     * @param id_record ID zaznamu testu
+     * @return v pripade uspechu vraci 0.
+     */
+    protected long isAutorOfRecord(String token, long id_record) {
+        TokenInfo tokenInfo = getTokenInfo(token);
+
+        if (id_record <= 0 || tokenInfo == null) //chybny vstup
+            return -400;
+
+        RecordTest recordTest = recordTestRepository.findById(id_record);
+
+        if (recordTest == null) //zaznam nenalezen
+            return -404;
+
+        if (!recordTest.getUser().getEmail().equals(tokenInfo.getEmail())) //uzivatel neni autorem zaznamu
+            return -403;
+
+        return 0;
+    }
 
     /**
      * Funkce vybere zaznam dle prislusneho ID
@@ -94,7 +114,6 @@ class RecordTestService {
      * @param data data k ulozeni
      * @return vraci chybu nebo ID upraveneho zaznamu
      */
-
     protected long updateRecordTest(String token, RecordTestController.UpdateRecordTestData data) {
         if (data.getId_record() <= 0)
             return -400;
@@ -121,15 +140,13 @@ class RecordTestService {
 
             if (dataAnswer.getId_answer() > 0){
 
-                RecordAnswer recordAnswer = new RecordAnswer();
+                Answer answer = answerRepository.getById(dataAnswer.getId_answer());
 
-                recordAnswer.setAnswer(answerRepository.getById(dataAnswer.getId_answer()));
-                recordAnswer.setSelectedValue(dataAnswer.isSelectedValue());
-                recordAnswer.setRecordTest(recordTest);
+                if ( answer != null && (answer.isTrue() != dataAnswer.isSelectedValue()) ){
 
-                recordAnswerRepository.save(recordAnswer);
+                    recordTest.getBadAnswers().add(answer);
 
-                recordTest.getRecordAnswers().add(recordAnswer);
+                }
 
             }
 

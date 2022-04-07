@@ -1,6 +1,7 @@
 package cz.mendelu.xlinek.eduapp.api.test;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.mendelu.xlinek.eduapp.api.subject.Subject;
 import cz.mendelu.xlinek.eduapp.api.test.question.Question;

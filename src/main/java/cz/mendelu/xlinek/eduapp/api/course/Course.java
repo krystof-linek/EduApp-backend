@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -23,11 +24,16 @@ public class Course {
     @Column(name = "title", nullable = false)
     private String title;
     @Column(name = "created")
-    private Long created;
+    private LocalDateTime created;
     @OneToOne
     @JoinColumn(name = "idSubject", foreignKey = @ForeignKey(name="FK_SUBJECT"))
     private Subject subject;
     @OneToOne
     @JoinColumn(name = "idAuthor", foreignKey = @ForeignKey(name="FK_USER"))
     private User user;
+
+    @PrePersist
+    protected void onCreate() {
+        created = LocalDateTime.now();
+    }
 }

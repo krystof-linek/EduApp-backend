@@ -12,8 +12,6 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 public class Paragraph extends Content {
-    @Column(name = "title_size")
-    private int title_size = 1;
     @Column(name = "text", nullable = false, columnDefinition = "TEXT")
     private String text;
 }

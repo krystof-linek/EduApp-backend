@@ -78,6 +78,12 @@ public class TestController {
             return test;
     }
 
+    @GetMapping("/get/all/active/by/subject/id/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Test> getAllActiveTestsBySubjectId(@PathVariable(value="id") int id){
+        return testService.getAllActiveTestsBySubjectId(id);
+    }
+
     /**
      * Endpoint slouzi k deaktivaci testu ==> studenti ho nebudou moci vyplnovat
      * @param token = autorizacni token

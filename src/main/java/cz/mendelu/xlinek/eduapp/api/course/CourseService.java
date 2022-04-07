@@ -124,7 +124,6 @@ public class CourseService {
         course.setTitle(data.getCourse_title());
         course.setSubject(subject);
         course.setUser(userService.getUserInfoByEmail(tokenInfo.getEmail()));
-        course.setCreated(new Timestamp(System.currentTimeMillis()).getTime());
 
         return courseRepository.save(course).getId();
     }
@@ -229,10 +228,45 @@ public class CourseService {
         paragraph.setSequence(contentRepository.findAllByCourse(course).size() + 1);
         /* PARAGRAPH PARAMS */
         paragraph.setText(data.getText());
-        paragraph.setTitle_size(data.getTitle_size());
 
         return  contentRepository.save(paragraph).getId();
     }
+
+    /**
+     * Funkce vytvori novy obsah typu nadpis pro prislusny kurz.
+     * @param token autorizacni token
+     * @param data prislusna data o obsahu
+     * @param idCourse kurz, kteremu bude prirazen obsah
+     * @return vraci ID noveho zaznamu
+     */
+    public int newContentTitle(String token, CourseController.TitleData data, int idCourse) {
+        if(!isTeacherOrAdmin(token))
+            return -1;
+
+        Course course = courseRepository.findById(idCourse);
+
+        if (course == null) //kurz neexistuje
+            return -2;
+
+        ContentType contentType = contentTypeRepository.findByName("title");
+
+        if (contentType == null) //typ neexistuje
+            return -3;
+
+        Title title = new Title();
+        /* MAIN PARAMS */
+        title.setCourse(course);
+        title.setTitle(data.getTitle());
+        title.setContentType(contentType);
+        title.setSequence(contentRepository.findAllByCourse(course).size() + 1);
+        /* TITLE PARAMS */
+        title.setTitle_size(data.getTitle_size());
+        title.setIcon(data.getIcon());
+        title.setIcon_color(data.getIcon_color());
+
+        return  contentRepository.save(title).getId();
+    }
+
     /**
      * Funkce vytvori novy obsah typu list pro prislusny kurz.
      * @param token autorizacni token

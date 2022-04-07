@@ -2,6 +2,7 @@ package cz.mendelu.xlinek.eduapp.api.test.record;
 
 import com.fasterxml.jackson.annotation.*;
 import cz.mendelu.xlinek.eduapp.api.test.Test;
+import cz.mendelu.xlinek.eduapp.api.test.answer.Answer;
 import cz.mendelu.xlinek.eduapp.api.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,18 +29,12 @@ public class RecordTest {
     @Column(name = "idRecordTest")
     private long id;
 
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Test.class)
-    @JsonProperty("id_test")
-    @JsonIdentityReference(alwaysAsId = true)
-
     @ManyToOne
     @JoinColumn(name = "idTest", foreignKey = @ForeignKey(name="FK_RECORD_T_TEST"))
     private Test test;
 
-    @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
     private LocalDateTime started;
 
-    @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
     private LocalDateTime ended;
 
     @JsonProperty("student")
@@ -47,25 +42,12 @@ public class RecordTest {
     @JoinColumn(name = "idUser", foreignKey = @ForeignKey(name="FK_RECORD_T_USER"))
     private User user;
 
-    @OneToMany(mappedBy = "recordTest", cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = RecordAnswer.class)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-
-    private List<RecordAnswer> recordAnswers = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.ALL, targetEntity = Answer.class)
+    private List<Answer> badAnswers = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
         started = LocalDateTime.now();
     }
 
-    @Override
-    public String toString() {
-        return "RecordTest{" +
-                "id=" + id +
-                ", test=" + test +
-                ", started=" + started +
-                ", ended=" + ended +
-                ", user=" + user +
-                ", recordAnswers=" + recordAnswers +
-                '}';
-    }
 }

@@ -1,8 +1,7 @@
 package cz.mendelu.xlinek.eduapp.api.test.answer;
 
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
+import cz.mendelu.xlinek.eduapp.api.test.Test;
 import cz.mendelu.xlinek.eduapp.api.test.explanation.Explanation;
 import cz.mendelu.xlinek.eduapp.api.test.content.TestContent;
 import cz.mendelu.xlinek.eduapp.api.test.question.Question;
@@ -16,6 +15,7 @@ import javax.persistence.*;
 @Setter
 @Getter
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "edu_sequence")
@@ -30,11 +30,15 @@ public class Answer {
     @ManyToOne
     @JoinColumn(name = "testContent", foreignKey = @ForeignKey(name="FK_ATEST_CONTENT"))
     private TestContent testContent;
+
     @ManyToOne
     @JoinColumn(name = "question", foreignKey = @ForeignKey(name="FK_QUESTION"))
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Question.class)
+    @JsonProperty("id_question")
     @JsonIdentityReference(alwaysAsId = true)
-    @JsonIgnore
+
     private Question question;
+
     @ManyToOne
     @JoinColumn(name = "explanation", foreignKey = @ForeignKey(name="FK_EXPLANATION"))
     private Explanation explanation;
