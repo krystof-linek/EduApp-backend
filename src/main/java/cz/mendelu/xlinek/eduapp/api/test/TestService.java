@@ -3,8 +3,8 @@ package cz.mendelu.xlinek.eduapp.api.test;
 import cz.mendelu.xlinek.eduapp.api.subject.Subject;
 import cz.mendelu.xlinek.eduapp.api.subject.SubjectRepository;
 import cz.mendelu.xlinek.eduapp.api.test.answer.Answer;
-import cz.mendelu.xlinek.eduapp.api.test.answer.AnswerController;
 import cz.mendelu.xlinek.eduapp.api.test.question.Question;
+import cz.mendelu.xlinek.eduapp.api.test.record.RecordTestRepository;
 import cz.mendelu.xlinek.eduapp.api.user.UserRepository;
 import cz.mendelu.xlinek.eduapp.utils.TokenInfo;
 import cz.mendelu.xlinek.eduapp.utils.TokenPayload;
@@ -19,6 +19,8 @@ public class TestService {
 
     @Autowired
     private TestRepository testRepository;
+    @Autowired
+    private RecordTestRepository recordTestRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -254,4 +256,21 @@ public class TestService {
         return testRepository.save(test).getId();
     }
 
+    /* ---- DELETE ---- */
+
+    protected long deleteOwnTestById(String token, long id) {
+        Test test = testRepository.findById(id);
+
+        long status = hasPermissions(token, test);
+
+        if (status != 0)
+            return status;
+
+        if (recordTestRepository.findAllByTest(test).size() != 0)
+            return -409;
+
+        testRepository.delete(test);
+
+        return 0;
+    }
 }

@@ -1,6 +1,5 @@
 package cz.mendelu.xlinek.eduapp.api.test;
 
-import cz.mendelu.xlinek.eduapp.api.course.CourseController;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,7 +49,7 @@ public class TestController {
     /**
      * Endpoint slouzi k nacteni aktivniho testu
      * @param id = ID testu
-     * @return v pripade uspechu vraci úatricny zaznam
+     * @return v pripade uspechu vraci patricny zaznam
      */
     @GetMapping("/active/load/by/id/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -170,5 +169,28 @@ public class TestController {
         }
         else
             return testService.getTestById(status);
+    }
+
+    /* DELETE METHODS */
+
+    /**
+     * Endpoint služí ke smazání testu, který si uživatel vytvořil.
+     * Kontroluje se tedy, jestli má uživatel příslušná oprávnění.
+     * Navíc jde smazat pouze test, který zatím žádný student nevyplnil.
+     * @param token autorizační token
+     * @param id id testu
+     */
+
+    @DeleteMapping("/delete/own/by/id/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteOwnTestById(Principal token, @PathVariable(value="id") long id){
+        long status = testService.deleteOwnTestById(token.getName(), id);
+
+        if (status == -409)
+            throw  new ResponseStatusException(HttpStatus.CONFLICT, "Can not be deleted'");
+
+        if (status < 0) {
+            throw myResponseEx(status);
+        }
     }
 }
