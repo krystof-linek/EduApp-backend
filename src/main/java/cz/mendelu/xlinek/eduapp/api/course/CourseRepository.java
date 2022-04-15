@@ -6,10 +6,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CourseRepository extends JpaRepository<Course, Integer> {
+public interface CourseRepository extends JpaRepository<Course, Long> {
     Course findByTitleEquals(String title);
-    Course findById(int id);
+    Course findById(long id);
     List<Course> findAll();
-    List<Course> findAllBySubject_IdSubjectOrderByTitle(int idSubject);
+    List<Course> findAllBySubject_IdSubjectOrderByTitle(long idSubject);
     List<Course> findAllByUserEmail(String email);
 }

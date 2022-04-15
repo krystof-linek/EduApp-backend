@@ -11,4 +11,7 @@ public interface RecordTestRepository extends JpaRepository<RecordTest, Long> {
     RecordTest findById(long id);
 
     List<RecordTest> findAllByTest(Test test);
+    List<RecordTest> findAllByTestIdOrderByEndedDesc(long id);
+    List<RecordTest> findAllByUserEmailOrderByEndedDesc(String email);
+    List<RecordTest> findAllByUserIdOrderByEndedDesc(long id);
 }

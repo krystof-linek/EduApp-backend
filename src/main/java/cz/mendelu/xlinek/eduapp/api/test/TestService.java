@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,7 +33,7 @@ public class TestService {
      * @param token
      * @return vraci true nebo false
      */
-    private long isTeacherOrAdmin(String token) {
+    protected long isTeacherOrAdmin(String token) {
         TokenInfo tokenInfo = getTokenInfo(token);
 
         if(!tokenInfo.isTokenValid())
@@ -94,7 +95,7 @@ public class TestService {
      * @param id id předmětu
      * @return vraci list zaznamu prislusnych testu
      */
-    protected List<Test> getAllActiveTestsBySubjectId(int id) {
+    protected List<Test> getAllActiveTestsBySubjectId(long id) {
         return testRepository.findAllBySubject_IdSubjectAndActiveAndOld(id, true, false);
     }
 
@@ -158,6 +159,54 @@ public class TestService {
             }
         }
         return test;
+    }
+
+    /**
+     * Funkce slouzi k zjisteni vsech predmetu, ke kterym ucitel vytvoril alespon jeden test.
+     * @param token autorizacni token ucitele
+     * @return vraci seznam predmetu.
+     */
+    protected List<Subject> getAllSubjectsOfTeacher(String token) {
+        TokenInfo tokenInfo = getTokenInfo(token);
+
+        if (tokenInfo == null)
+            return null;
+
+        List<Test> tests = testRepository.findAllByUserEmail(tokenInfo.getEmail());
+
+        List<Subject> subjects = new ArrayList<>();
+
+        for (Test test : tests) {
+            if (!subjects.contains(test.getSubject()))
+                subjects.add(test.getSubject());
+        }
+
+        return subjects;
+    }
+
+    /**
+     * Funkce slouzi ke zjisteni vsech testu, ktere uzivatel vytvoril v ramci urciteho predmetu.
+     * @param id predmetu
+     * @return vraci seznam informaci o testu
+     */
+    protected List<TestController.DataTestInfo> getAllTestsOfTeacherBySubject(long id) {
+        List<TestController.DataTestInfo> testInfos = new ArrayList<>();
+
+        List<Test> tests = testRepository.findAllBySubject_IdSubject(id);
+
+        if (tests.size() == 0)
+            return testInfos;
+
+        for (Test test : tests) {
+            TestController.DataTestInfo testInfo = new TestController.DataTestInfo();
+
+            testInfo.setId_test(test.getId());
+            testInfo.setTitle(test.getTitle());
+
+            testInfos.add(testInfo);
+        }
+
+        return testInfos;
     }
 
     /* ---- INSERT ---- */
@@ -273,4 +322,5 @@ public class TestService {
 
         return 0;
     }
+
 }

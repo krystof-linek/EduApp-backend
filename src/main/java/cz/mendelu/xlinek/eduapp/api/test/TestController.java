@@ -1,5 +1,6 @@
 package cz.mendelu.xlinek.eduapp.api.test;
 
+import cz.mendelu.xlinek.eduapp.api.subject.Subject;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,8 @@ public class TestController {
             return new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permissions!");
         if (errNumber == -404)
             return new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found");
+        if (errNumber == -409)
+            return new ResponseStatusException(HttpStatus.CONFLICT, "Conflict");
 
         return new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED, "SERVER_ERROR");
     }
@@ -79,7 +82,7 @@ public class TestController {
 
     @GetMapping("/get/all/active/by/subject/id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Test> getAllActiveTestsBySubjectId(@PathVariable(value="id") int id){
+    public List<Test> getAllActiveTestsBySubjectId(@PathVariable(value="id") long id){
         return testService.getAllActiveTestsBySubjectId(id);
     }
 
@@ -128,6 +131,47 @@ public class TestController {
         return testService.getAllTestsOfUser(token.getName());
     }
 
+    /**
+     * Endpoint slouzi ke zjisteni vsechn predmetu, kde ucitel vytvoril alespon jeden test.
+     * @param token autorizacni token
+     * @return vraci seznam predmetu.
+     */
+    @GetMapping("/all/my/subjects")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Subject> getAllSubjectsOfMyTests(Principal token){
+
+        long status = testService.isTeacherOrAdmin(token.getName());
+
+        if (status != 0)
+            throw myResponseEx(status);
+
+        return testService.getAllSubjectsOfTeacher(token.getName());
+    }
+
+    @Data
+    static class DataTestInfo {
+        private long id_test = -1;
+        private String title = "";
+    }
+
+    /**
+     * Endpoint slouzi ke zjisteni vsech testu, ktere ucitel vytvoril v ramci nejakeho konkretniho predmetu.
+     * @param token autorizacni token
+     * @param id id predmetu
+     * @return vraci seznam informaci o vytvorenych testech v ramci zadaneho predmetu
+     */
+    @GetMapping("/all/my/by/subject/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<DataTestInfo> getAllMyTestsBySubjectId(Principal token, @PathVariable(name = "id") long id){
+
+        long status = testService.isTeacherOrAdmin(token.getName());
+
+        if (status != 0)
+            throw myResponseEx(status);
+
+        return testService.getAllTestsOfTeacherBySubject(id);
+    }
+
     /* ---- POST METHODS ---- */
 
     @Data
@@ -152,7 +196,7 @@ public class TestController {
     @Data
     static class updateTestData {
         private String title = "";
-        private int id_subject = -1; //upravit na long
+        private long id_subject = -1; //upravit na long
         private long id_test = -1;
         private boolean active = false;
         private boolean open = false;

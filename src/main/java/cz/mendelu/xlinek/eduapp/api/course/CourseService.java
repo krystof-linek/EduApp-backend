@@ -68,7 +68,7 @@ public class CourseService {
      * @param id ID obsahu.
      * @return vraci prislusny zaznam nebo null pokud neexistuje
      */
-    protected Content getContentById(int id){
+    protected Content getContentById(long id){
         return contentRepository.findById(id);
     }
 
@@ -77,7 +77,7 @@ public class CourseService {
      * @param idSubject id predmetu
      * @return vraci pole odpovidajicich zaznamu
      */
-    protected List<Course> getAllCoursesBySubjectId(int idSubject) {
+    protected List<Course> getAllCoursesBySubjectId(long idSubject) {
         return courseRepository.findAllBySubject_IdSubjectOrderByTitle(idSubject);
     }
 
@@ -103,7 +103,7 @@ public class CourseService {
      * @param data data z pozadavku v prislusnem formatu
      * @return vraci ID nove vytvoreneho zaznamu
      */
-    protected int newCourse(String token, CourseController.DataNewCourse data) {
+    protected long newCourse(String token, CourseController.DataNewCourse data) {
 
         if(!isTeacherOrAdmin(token)) //nejsou prislusna opravneni
             return -1;
@@ -134,7 +134,7 @@ public class CourseService {
      * @param idCourse kurz, kteremu bude prirazen obsah
      * @return vraci ID noveho zaznamu
      */
-    public int newContentVideo(String token, CourseController.VideoData data, int idCourse) {
+    public long newContentVideo(String token, CourseController.VideoData data, long idCourse) {
         if(!isTeacherOrAdmin(token))
             return -1;
 
@@ -160,7 +160,7 @@ public class CourseService {
         video.setLink(data.getLink());
         video.setInserted(new Timestamp(System.currentTimeMillis()).getTime());
 
-        return  contentRepository.save(video).getId();
+        return contentRepository.save(video).getId();
     }
     /**
      * Funkce vytvori novy obsah typu obrazek pro prislusny kurz.
@@ -169,7 +169,7 @@ public class CourseService {
      * @param idCourse kurz, kteremu bude prirazen obsah
      * @return vraci ID noveho zaznamu
      */
-    public int newContentPicture(String token, CourseController.PictureData data, int idCourse) {
+    public long newContentPicture(String token, CourseController.PictureData data, long idCourse) {
         if(!isTeacherOrAdmin(token))
             return -1;
 
@@ -205,7 +205,7 @@ public class CourseService {
      * @param idCourse kurz, kteremu bude prirazen obsah
      * @return vraci ID noveho zaznamu
      */
-    public int newContentParagraph(String token, CourseController.ParagraphData data, int idCourse) {
+    public long newContentParagraph(String token, CourseController.ParagraphData data, long idCourse) {
         if(!isTeacherOrAdmin(token))
             return -1;
 
@@ -239,7 +239,7 @@ public class CourseService {
      * @param idCourse kurz, kteremu bude prirazen obsah
      * @return vraci ID noveho zaznamu
      */
-    public int newContentTitle(String token, CourseController.TitleData data, int idCourse) {
+    public long newContentTitle(String token, CourseController.TitleData data, long idCourse) {
         if(!isTeacherOrAdmin(token))
             return -1;
 
@@ -274,7 +274,7 @@ public class CourseService {
      * @param idCourse kurz, kteremu bude prirazen obsah
      * @return vraci ID noveho zaznamu
      */
-    public int newContentList(String token, CourseController.ListData data, int idCourse) {
+    public long newContentList(String token, CourseController.ListData data, long idCourse) {
 
         if(!isTeacherOrAdmin(token))
             return -1;
@@ -321,7 +321,7 @@ public class CourseService {
      * @param idCourse kurz, kteremu bude prirazen obsah
      * @return vraci ID noveho zaznamu
      */
-    public int newContentLink(String token, CourseController.LinkData data, int idCourse) {
+    public long newContentLink(String token, CourseController.LinkData data, long idCourse) {
         if(!isTeacherOrAdmin(token))
             return -1;
 
@@ -357,7 +357,7 @@ public class CourseService {
      * @param idCourse kurz, kteremu bude prirazen obsah
      * @return vraci ID noveho zaznamu
      */
-    public int newContentNotice(String token, CourseController.NoticeData data, int idCourse) {
+    public long newContentNotice(String token, CourseController.NoticeData data, long idCourse) {
         if(!isTeacherOrAdmin(token))
             return -1;
 
@@ -385,7 +385,7 @@ public class CourseService {
         return  contentRepository.save(notice).getId();
     }
 
-    protected Course getCourseById(int id){
+    protected Course getCourseById(long id){
         return courseRepository.findById(id);
     }
 
@@ -393,7 +393,7 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
-    protected List<Content> getCourseContentById(int idCourse) {
+    protected List<Content> getCourseContentById(long idCourse) {
         return contentRepository.findAllByCourse_IdOrderBySequence(idCourse);
     }
 

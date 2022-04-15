@@ -26,7 +26,7 @@ public class CourseController {
 
     @GetMapping("/all/by/subject/id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Course> getAllCoursesBySubjectId(@PathVariable(value="id") int idSubject){
+    public List<Course> getAllCoursesBySubjectId(@PathVariable(value="id") long idSubject){
         return courseService.getAllCoursesBySubjectId(idSubject);
     }
 
@@ -50,7 +50,7 @@ public class CourseController {
 
     @GetMapping("/content/by/id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Content> getCourseContentById(@PathVariable(value="id") int idCourse){
+    public List<Content> getCourseContentById(@PathVariable(value="id") long idCourse){
         return courseService.getCourseContentById(idCourse);
     }
 
@@ -74,7 +74,7 @@ public class CourseController {
 
         String token = principal.getName();
 
-        int status = courseService.newCourse(token, data);
+        long status = courseService.newCourse(token, data);
 
         if (status == -1)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission!");
@@ -100,9 +100,9 @@ public class CourseController {
      */
     @PostMapping("/{id}/new/video")
     @ResponseStatus(HttpStatus.CREATED)
-    public Content newContentVideo(Principal token, @RequestBody VideoData data, @PathVariable(value="id") int idCourse){
+    public Content newContentVideo(Principal token, @RequestBody VideoData data, @PathVariable(value="id") long idCourse){
 
-        int status = courseService.newContentVideo(token.getName(), data, idCourse);
+        long status = courseService.newContentVideo(token.getName(), data, idCourse);
 
         if (status == -1)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do have not permission!");
@@ -131,9 +131,9 @@ public class CourseController {
      */
     @PostMapping("/{id}/new/picture")
     @ResponseStatus(HttpStatus.CREATED)
-    public Content newContentPicture(Principal token, @RequestBody PictureData data, @PathVariable(value="id") int idCourse){
+    public Content newContentPicture(Principal token, @RequestBody PictureData data, @PathVariable(value="id") long idCourse){
 
-        int status = courseService.newContentPicture(token.getName(), data, idCourse);
+        long status = courseService.newContentPicture(token.getName(), data, idCourse);
 
         if (status == -1)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do have not permission!");
@@ -161,9 +161,9 @@ public class CourseController {
      */
     @PostMapping("/{id}/new/paragraph")
     @ResponseStatus(HttpStatus.CREATED)
-    public Content newContentParagraph(Principal token, @RequestBody ParagraphData data, @PathVariable(value="id") int idCourse){
+    public Content newContentParagraph(Principal token, @RequestBody ParagraphData data, @PathVariable(value="id") long idCourse){
 
-        int status = courseService.newContentParagraph(token.getName(), data, idCourse);
+        long status = courseService.newContentParagraph(token.getName(), data, idCourse);
 
         if (status == -1)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do have not permission!");
@@ -191,9 +191,9 @@ public class CourseController {
      */
     @PostMapping("/{id}/new/title")
     @ResponseStatus(HttpStatus.CREATED)
-    public Content newContentTitle(Principal token, @RequestBody TitleData data, @PathVariable(value="id") int idCourse){
+    public Content newContentTitle(Principal token, @RequestBody TitleData data, @PathVariable(value="id") long idCourse){
 
-        int status = courseService.newContentTitle(token.getName(), data, idCourse);
+        long status = courseService.newContentTitle(token.getName(), data, idCourse);
 
         if (status == -1)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do have not permission!");
@@ -221,9 +221,9 @@ public class CourseController {
      */
     @PostMapping("/{id}/new/list")
     @ResponseStatus(HttpStatus.CREATED)
-    public Content newContentList(Principal token, @RequestBody ListData data, @PathVariable(value="id") int idCourse){
+    public Content newContentList(Principal token, @RequestBody ListData data, @PathVariable(value="id") long idCourse){
 
-        int status = courseService.newContentList(token.getName(), data, idCourse);
+        long status = courseService.newContentList(token.getName(), data, idCourse);
 
         if (status == -1)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do have not permission!");
@@ -252,9 +252,9 @@ public class CourseController {
      */
     @PostMapping("/{id}/new/link")
     @ResponseStatus(HttpStatus.CREATED)
-    public Content newContentLink(Principal token, @RequestBody LinkData data, @PathVariable(value="id") int idCourse){
+    public Content newContentLink(Principal token, @RequestBody LinkData data, @PathVariable(value="id") long idCourse){
 
-        int status = courseService.newContentLink(token.getName(), data, idCourse);
+        long status = courseService.newContentLink(token.getName(), data, idCourse);
 
         if (status == -1)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do have not permission!");
@@ -281,9 +281,9 @@ public class CourseController {
      */
     @PostMapping("/{id}/new/notice")
     @ResponseStatus(HttpStatus.CREATED)
-    public Content newContentNotice(Principal token, @RequestBody NoticeData data, @PathVariable(value="id") int idCourse){
+    public Content newContentNotice(Principal token, @RequestBody NoticeData data, @PathVariable(value="id") long idCourse){
 
-        int status = courseService.newContentNotice(token.getName(), data, idCourse);
+        long status = courseService.newContentNotice(token.getName(), data, idCourse);
 
         if (status == -1)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do have not permission!");
@@ -294,8 +294,6 @@ public class CourseController {
         else
             return courseService.getContentById(status);
     }
-
-
 
 
     @GetMapping("/init")

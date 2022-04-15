@@ -1,6 +1,5 @@
 package cz.mendelu.xlinek.eduapp.api.course.content;
 
-import cz.mendelu.xlinek.eduapp.api.course.content.Content;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

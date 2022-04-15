@@ -19,7 +19,7 @@ public class ListItem {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "edu_sequence")
     @TableGenerator(name = "edu_sequence", table = "seq_table", pkColumnName = "entity", valueColumnName = "seq_value", initialValue = 0, allocationSize = 1)
     @Column(name = "idItem")
-    private int id;
+    private long id;
     @Column(name = "sequence", nullable = false)
     private int sequence = 0;
     @Column(name = "text")

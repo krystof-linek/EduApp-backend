@@ -7,11 +7,12 @@ import java.util.List;
 
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Long> {
     //List<User> findAll();
     List<User> findAllByClassRoomEqualsAndRoleEquals(String classRoom, String role);
     List<User> findAllByRoleAndValidated(String role, boolean validated);
-    User findUserById(int id);
+    List<User> findAllByRole(String role);
+    List<User> findAllByRoleAndClassRoomAndGrade(String role, String classRoom, int grade);
+    User findUserById(long id);
     User findUserByEmail(String email);
-
 }

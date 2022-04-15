@@ -12,5 +12,7 @@ public interface TestRepository extends JpaRepository<Test, Long> {
 
     List<Test> findAllByUserEmail(String email);
 
-    List<Test> findAllBySubject_IdSubjectAndActiveAndOld(int id, boolean active, boolean old);
+    List<Test> findAllBySubject_IdSubjectAndActiveAndOld(long id, boolean active, boolean old);
+
+    List<Test> findAllBySubject_IdSubject(long id);
 }

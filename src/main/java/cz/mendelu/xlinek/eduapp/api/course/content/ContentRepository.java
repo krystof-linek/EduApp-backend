@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ContentRepository extends JpaRepository<Content, Integer> {
-    List<Content> findAllByCourse_IdOrderBySequence(int id);
+public interface ContentRepository extends JpaRepository<Content, Long> {
+    List<Content> findAllByCourse_IdOrderBySequence(long id);
     List<Content> findAllByCourse(Course course);
-    Content findById(int id);
+    Content findById(long id);
 }

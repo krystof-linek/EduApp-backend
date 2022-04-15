@@ -21,7 +21,7 @@ public class Content {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "edu_sequence")
     @TableGenerator(name = "edu_sequence", table = "seq_table", pkColumnName = "entity", valueColumnName = "seq_value", initialValue = 0, allocationSize = 1)
     @Column(name = "idContent")
-    private int id;
+    private long id;
 
     @Column(name = "title")
     private String title;

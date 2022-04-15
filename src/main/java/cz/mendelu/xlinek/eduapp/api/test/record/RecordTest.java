@@ -50,4 +50,15 @@ public class RecordTest {
         started = LocalDateTime.now();
     }
 
+    @Override
+    public String toString() {
+        return "RecordTest{" +
+                "id=" + id +
+                ", test=" + test +
+                ", started=" + started +
+                ", ended=" + ended +
+                ", user=" + user +
+                ", badAnswers=" + badAnswers +
+                '}';
+    }
 }

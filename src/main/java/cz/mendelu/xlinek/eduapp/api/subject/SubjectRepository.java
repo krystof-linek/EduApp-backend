@@ -6,9 +6,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SubjectRepository extends JpaRepository<Subject, Integer> {
+public interface SubjectRepository extends JpaRepository<Subject, Long> {
     Subject findByTitleAndAndGrade(String title, int grade);
-    Subject findByIdSubject(int id);
+    Subject findByIdSubject(long id);
     List<Subject> findAllByGrade(int grade);
 
 }
