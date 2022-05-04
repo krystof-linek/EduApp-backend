@@ -1,8 +1,5 @@
 package cz.mendelu.xlinek.eduapp;
 
-import cz.mendelu.xlinek.eduapp.api.course.content.ContentType;
-import cz.mendelu.xlinek.eduapp.api.course.content.ContentTypeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
