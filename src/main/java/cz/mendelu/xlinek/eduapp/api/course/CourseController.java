@@ -295,6 +295,25 @@ public class CourseController {
             return courseService.getContentById(status);
     }
 
+    /* DELETE METHODS */
+
+    /**
+     * Endpoint služí ke smazání kurzu, který si uživatel (učitel) vytvořil.
+     * Kontroluje se tedy, jestli má uživatel příslušná oprávnění.
+     * @param token autorizační token
+     * @param id id kurzu
+     */
+
+    @DeleteMapping("/delete/own/by/id/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteOwnCourseById(Principal token, @PathVariable(value="id") long id){
+        long status = courseService.deleteOwnCourseById(token.getName(), id);
+
+        if (status == -403)
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do have not permission!");
+        if (status == -404)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found");
+    }
 
     @GetMapping("/init")
     @ResponseStatus(HttpStatus.OK)

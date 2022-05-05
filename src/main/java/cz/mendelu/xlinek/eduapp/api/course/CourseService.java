@@ -9,11 +9,14 @@ import cz.mendelu.xlinek.eduapp.api.course.content.Video;
 import cz.mendelu.xlinek.eduapp.api.course.content.MyList;
 import cz.mendelu.xlinek.eduapp.api.subject.Subject;
 import cz.mendelu.xlinek.eduapp.api.subject.SubjectService;
+import cz.mendelu.xlinek.eduapp.api.test.Test;
 import cz.mendelu.xlinek.eduapp.api.user.UserService;
 import cz.mendelu.xlinek.eduapp.utils.TokenInfo;
 import cz.mendelu.xlinek.eduapp.utils.TokenPayload;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -59,6 +62,28 @@ public class CourseService {
     private TokenInfo getTokenInfo(String token){
         return new TokenPayload(token).getTokenInfo();
     }
+
+    /**
+     * Funkce zkontroluje, jestli ma uzivatel prislusna opravenni či nikoliv.
+     * @param token autorizacni token
+     * @param course kurz pro overeni
+     * @return vraci 0 v pripade uspechu.
+     */
+    private long hasPermissions(String token, Course course){
+        if (!isTeacherOrAdmin(token))
+            return -403;
+
+        if (course == null)
+            return -404;
+
+        TokenInfo tokenInfo = getTokenInfo(token);
+
+        if (course.getUser().getEmail().equals(tokenInfo.getEmail()))
+            return 0;
+
+        return -403;
+    }
+
     /* ------------ CONTROLLER FUNCTIONS -------------- */
 
     /* ------ SELECT ------ */
@@ -96,6 +121,35 @@ public class CourseService {
     }
 
     /* ------ INSERT ------ */
+
+    /* ---- DELETE ---- */
+
+    /**
+     * Funkce slouzi ke smazani kurzu, ktery si uzivatel vytvoril.
+     * Kontroluje se zda je uzivatel vlastnikem kurzu,
+     * @param token autorizacni token
+     * @param id id kurzu
+     * @return v pripade uspechu vraci 0, jinak chybovy kod
+     */
+
+    protected long deleteOwnCourseById(String token, long id) {
+        Course course = courseRepository.findById(id);
+
+        long status = hasPermissions(token, course);
+
+        if (status != 0)
+            return status;
+
+        List<Content> contents = contentRepository.findAllByCourse(course);
+
+        for (Content content: contents) {
+            contentRepository.delete(content);
+        }
+
+        courseRepository.delete(course);
+
+        return 0;
+    }
 
     /**
      * Funkce slouzi k vytvoreni noveho kurzu.
@@ -394,6 +448,12 @@ public class CourseService {
     }
 
     protected List<Content> getCourseContentById(long idCourse) {
+
+        Course course = courseRepository.findById(idCourse);
+
+        if (course == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found!");
+
         return contentRepository.findAllByCourse_IdOrderBySequence(idCourse);
     }
 
