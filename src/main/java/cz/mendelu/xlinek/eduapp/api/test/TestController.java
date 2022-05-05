@@ -16,6 +16,11 @@ public class TestController {
     @Autowired
     TestService testService;
 
+    /**
+     * Funkce slouzi k vyvolani prislusne vyjimky na zaklade chyboveho kodu
+     * @param errNumber chybovy kod
+     * @return vraci prislusnou vyjimku
+     */
     private ResponseStatusException myResponseEx(long errNumber){
         if (errNumber == -400)
             return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad input!");
@@ -181,6 +186,13 @@ public class TestController {
         private int subject_grade = 0;
     }
 
+    /**
+     * Enpoint slouzi k vytvoreni noveho testu.
+     * Dochazi k overeni prav uzivatele a vstupnich udaju.
+     * @param token autorizacni token
+     * @param data udaje o testu
+     * @return v pripade uspechu vraci novy zaznam
+     */
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public Test createNewTest(Principal token, @RequestBody TestController.newTestData data){

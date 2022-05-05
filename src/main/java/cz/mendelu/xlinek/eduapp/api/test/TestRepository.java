@@ -11,8 +11,6 @@ public interface TestRepository extends JpaRepository<Test, Long> {
     Test findByIdAndActiveAndOld(long id, boolean active, boolean old);
 
     List<Test> findAllByUserEmail(String email);
-
     List<Test> findAllBySubject_IdSubjectAndActiveAndOld(long id, boolean active, boolean old);
-
     List<Test> findAllBySubject_IdSubject(long id);
 }

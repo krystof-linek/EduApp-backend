@@ -48,16 +48,5 @@ public class Question {
     @ManyToOne()
     @JoinColumn(name = "id_test")
     private Test test;
-/*
-    @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ", sequence=" + sequence +
-                ", testContent=" + testContent +
-                ", answers=" + answers +
-                '}';
-    }
 
- */
 }

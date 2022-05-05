@@ -16,6 +16,11 @@ public class QuestionController {
     @Autowired
     QuestionService questionService;
 
+    /**
+     * Funkce slouzi k vyvolani prislusne vyjimky na zaklade chyboveho kodu
+     * @param errNumber chybovy kod
+     * @return vraci prislusnou vyjimku
+     */
     private ResponseStatusException myResponseEx(long errNumber){
         if (errNumber == -400)
             return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad input!");
@@ -37,6 +42,12 @@ public class QuestionController {
         private long id_test = -1;
     }
 
+    /**
+     * Endpoint pro prirazeni nove otazky k testu.
+     * @param token autorizacni token
+     * @param data udaje o otazce
+     * @return v pripade uspechu vraci nove vytvorenou otazku
+     */
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public Question newQuestionOfTest(Principal token, @RequestBody NewQuestionData data){
@@ -58,6 +69,12 @@ public class QuestionController {
         private String equation = "";
     }
 
+    /**
+     * Endpoint slouzi k aktualizaci otazky
+     * @param token autorizacni token
+     * @param data data o otazce
+     * @return vraci upravenou otazku
+     */
     @PostMapping("/update")
     @ResponseStatus(HttpStatus.CREATED)
     public Question updateQuestionOfTest(Principal token, @RequestBody UpdateQuestionData  data){
@@ -79,7 +96,7 @@ public class QuestionController {
     }
 
     /**
-     * Endpoint, který slouží k smazání otázky
+     * Endpoint, který slouží ke smazání otázky
      * @param token autorizačnní token
      * @param id_question id otázky
      */

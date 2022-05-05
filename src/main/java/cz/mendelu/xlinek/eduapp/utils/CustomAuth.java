@@ -24,12 +24,6 @@ public class CustomAuth implements AuthenticationProvider {
         return authenticationToken;
     }
 
-    /**
-     * Because I am going to use HttpBasicAuthentication
-     * and HttpBasicAuthentication uses UsernamePasswordAuthenticationToken
-     * @param authenticationType
-     * @return
-     */
     @Override
     public boolean supports(Class<?> authenticationType) {
         return UsernamePasswordAuthenticationToken.class.equals(authenticationType);

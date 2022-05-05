@@ -1,7 +1,6 @@
 package cz.mendelu.xlinek.eduapp.api.test.answer;
 
 import com.fasterxml.jackson.annotation.*;
-import cz.mendelu.xlinek.eduapp.api.test.Test;
 import cz.mendelu.xlinek.eduapp.api.test.explanation.Explanation;
 import cz.mendelu.xlinek.eduapp.api.test.content.TestContent;
 import cz.mendelu.xlinek.eduapp.api.test.question.Question;

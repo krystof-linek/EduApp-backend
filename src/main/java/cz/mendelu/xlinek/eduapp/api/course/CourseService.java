@@ -8,8 +8,10 @@ import cz.mendelu.xlinek.eduapp.api.course.content.Picture;
 import cz.mendelu.xlinek.eduapp.api.course.content.Video;
 import cz.mendelu.xlinek.eduapp.api.course.content.MyList;
 import cz.mendelu.xlinek.eduapp.api.subject.Subject;
+import cz.mendelu.xlinek.eduapp.api.subject.SubjectRepository;
 import cz.mendelu.xlinek.eduapp.api.subject.SubjectService;
 import cz.mendelu.xlinek.eduapp.api.test.Test;
+import cz.mendelu.xlinek.eduapp.api.user.UserRepository;
 import cz.mendelu.xlinek.eduapp.api.user.UserService;
 import cz.mendelu.xlinek.eduapp.utils.TokenInfo;
 import cz.mendelu.xlinek.eduapp.utils.TokenPayload;
@@ -25,15 +27,15 @@ import java.util.List;
 public class CourseService {
     @Autowired
     CourseRepository courseRepository;
-    @Autowired
-    UserService userService;
-    @Autowired
-    SubjectService subjectService;
     /* ----------- CONTENT REPOSITORIES ------------- */
     @Autowired
     ContentTypeRepository contentTypeRepository;
     @Autowired
     ContentRepository contentRepository;
+    @Autowired
+    SubjectRepository subjectRepository;
+    @Autowired
+    UserRepository userRepository;
 
     /* ----------- PRIVATE FUNCTIONS ------------ */
     /**
@@ -47,7 +49,7 @@ public class CourseService {
         if(!tokenInfo.isTokenValid())
             return false;
 
-        String role = userService.getUserRoleByEmail(tokenInfo.getEmail());
+        String role = userRepository.findUserByEmail(tokenInfo.getEmail()).getRole();
         if (!(role.equals("TEACHER") || role.equals("ADMIN")))
             return false;
 
@@ -169,15 +171,22 @@ public class CourseService {
 
         Course course = new Course();
 
-        Subject subject = subjectService.findSubjectByTitleAndGrade(data.getSubject_title(), data.getGrade());
+        String sub_title = data.getSubject_title();
+        sub_title = sub_title.toLowerCase();
+        sub_title = sub_title.substring(0, 1).toUpperCase() + sub_title.substring(1);
+
+        Subject subject = subjectRepository.findByTitleAndAndGrade(sub_title, data.getGrade());
 
         if (subject == null){
-            subject = subjectService.createSubject(data.getSubject_title(), data.getGrade());
+            Subject sub = new Subject();
+            sub.setTitle(data.getSubject_title());
+            sub.setGrade(data.getGrade());
+            subject = subjectRepository.save(sub);
         }
 
         course.setTitle(data.getCourse_title());
         course.setSubject(subject);
-        course.setUser(userService.getUserInfoByEmail(tokenInfo.getEmail()));
+        course.setUser(userRepository.findUserByEmail(tokenInfo.getEmail()));
 
         return courseRepository.save(course).getId();
     }

@@ -10,12 +10,20 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Trida obsluhuje funkcionalitu uzivatele
+ */
 @RestController
 @RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Funkce slouzi k vyvolani prislusne vyjimky na zaklade chyboveho kodu
+     * @param errNumber chybovy kod
+     * @return vraci prislusnou vyjimku
+     */
     private ResponseStatusException myResponseEx(long errNumber){
         if (errNumber == -400)
             return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad input!");
@@ -241,7 +249,7 @@ public class UserController {
     }
 
     /**
-     *
+     * Endpoint slouzi k vytvoreni noveho zaznamu uzivatele
      * @param principal zde je ulozen google id_token
      * @param data dalsi potrebna data, ktera nejsou ulozena
      * @return v pripade uspechu vraci noveho uzivatele, jinak patricne chybove hlaseni.

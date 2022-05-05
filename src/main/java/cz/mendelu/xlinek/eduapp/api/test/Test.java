@@ -49,7 +49,6 @@ public class Test {
     @JoinColumn(name = "idAuthor", foreignKey = @ForeignKey(name="FK_TEST_USER"))
     private User user;
 
-    //@OneToMany(mappedBy = "id")
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Question.class)
     @OnDelete(action = OnDeleteAction.CASCADE)
 

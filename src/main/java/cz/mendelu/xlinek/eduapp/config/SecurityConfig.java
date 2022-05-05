@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -46,21 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                //.antMatchers("/**").hasRole("USER")
-                //.antMatchers("/admin").hasRole("ADMIN").and()
                 .addFilterBefore(myTokenFilter, UsernamePasswordAuthenticationFilter.class);
-        /*
-                    and().
-                authorizeRequests().anyRequest().authenticated();
-        /*
-                    .and()
-                .oauth2Login()
-                  .userInfoEndpoint()
-                  .oidcUserService(oidcUserService);
-
-         */
-
-        //http.logout().logoutSuccessUrl("http://your-auth-server/exit");
 
         http.exceptionHandling().authenticationEntryPoint(authEntryPoint);
 

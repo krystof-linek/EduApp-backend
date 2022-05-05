@@ -1,6 +1,5 @@
 package cz.mendelu.xlinek.eduapp.api.test.answer;
 
-import cz.mendelu.xlinek.eduapp.api.course.CourseController;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +16,11 @@ public class AnswerController {
     @Autowired
     AnswerService answerService;
 
+    /**
+     * Funkce slouzi k vyvolani prislusne vyjimky na zaklade chyboveho kodu
+     * @param errNumber chybovy kod
+     * @return vraci prislusnou vyjimku
+     */
     private ResponseStatusException myResponseEx(long errNumber){
         if (errNumber == -400)
             return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad input!");

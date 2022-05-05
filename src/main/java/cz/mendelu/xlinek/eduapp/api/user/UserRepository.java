@@ -5,10 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    //List<User> findAll();
     List<User> findAllByClassRoomEqualsAndRoleEquals(String classRoom, String role);
     List<User> findAllByRoleAndValidated(String role, boolean validated);
     List<User> findAllByRole(String role);

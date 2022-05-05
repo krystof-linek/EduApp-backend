@@ -307,6 +307,13 @@ public class TestService {
 
     /* ---- DELETE ---- */
 
+    /**
+     * Funkce slouzi ke smazani testu, u ktereho je uzivatel autorem.
+     * @param token autorizacni token
+     * @param id id testu
+     * @return v pripade uspechu vraci 0
+     */
+
     protected long deleteOwnTestById(String token, long id) {
         Test test = testRepository.findById(id);
 

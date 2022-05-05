@@ -19,6 +19,10 @@ public class UserService {
 
     /* ---- PRIVATE FUNCTIONS ---- */
 
+    private TokenInfo getTokenInfo(String token){
+        return new TokenPayload(token).getTokenInfo();
+    }
+
     /**
      * Funkce slouží k ověření příslušných oprávnění
      * @param token autorizacni token
@@ -39,7 +43,7 @@ public class UserService {
     }
 
     /**
-     * Funkce kontroluje, jestli je uzivatel rodic a jestli se parametr id_parent shoduje
+     * Funkce kontroluje, jestli je uzivatel rodic a jestli se parametr id_parent shoduje s
      * id kontrolovaneho uzivatele. ==> jestli se jedna o jednu a tu samou osobu
      * @param token autorizacni token
      * @return vraci 0 v pripade uspechu
@@ -78,10 +82,6 @@ public class UserService {
             return 0L;
     }
 
-    private TokenInfo getTokenInfo(String token){
-        return new TokenPayload(token).getTokenInfo();
-    }
-
     public User getUserInfoByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
@@ -91,33 +91,41 @@ public class UserService {
     protected User getUserInfoById(long id) {
         return userRepository.findUserById(id);
     }
-
     protected User getUserInfo(String token) {
         return userRepository.findUserByEmail(getTokenInfo(token).getEmail());
     }
 
     /* ---- SELECT ---- */
 
+    /**
+     * Funkce vybere vsechny uzivatele na zaklade tridy a role
+     * @param classRoom trida
+     * @param role role uzivatele
+     * @return
+     */
     public List<User> findAllByClassAndRole(String classRoom, String role) {
         return userRepository.findAllByClassRoomEqualsAndRoleEquals(classRoom, role);
     }
-
+    /**
+     * Funkce vybere vsechny rodicovske ucty, ktere dosud nebyly schvaleny
+     * @return vraci seznam neoverenych uctu
+     */
     protected List<User> findAllNotValidatedParents() {
-
-
         return userRepository.findAllByRoleAndValidated("PARENT", false);
     }
-
+    /**
+     * Funkce vybere vsechny zaznamy na zaklade role uzivatele.
+     * @param role role uzivatele
+     * @return vraci seznam prislusnych uctu
+     */
     protected List<User> findAllByRole(String role){
         return userRepository.findAllByRole(role);
     }
-
     /**
      * Funkce vybere vsechny deti uzivatele
      * @param id rodice
      * @return pokud rodic existuje, tak vraci seznam prirazenych deti
      */
-
     protected List<User> findAllKidsOfParent(long id) {
 
         Parent parent = parentRepository.findById(id);
@@ -127,7 +135,6 @@ public class UserService {
 
         return parent.getKids();
     }
-
     /**
      * Funkce vybere na zaklade parametru seznam studentu.
      * @param data udaje o tride a rocniku
@@ -156,8 +163,6 @@ public class UserService {
             return -409L;
 
         User user = new User();
-
-        long id = 0;
 
         user.setEmail(tokenInfo.getEmail());
         user.setName(tokenInfo.getName());
