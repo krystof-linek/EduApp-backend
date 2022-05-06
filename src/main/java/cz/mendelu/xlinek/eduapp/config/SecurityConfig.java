@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.exceptionHandling().authenticationEntryPoint(authEntryPoint);
 
-        http.csrf().disable();
+        http.csrf().disable(); //testovani
     }
 
     @Override
