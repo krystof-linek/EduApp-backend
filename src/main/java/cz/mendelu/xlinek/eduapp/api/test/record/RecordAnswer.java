@@ -1,7 +1,6 @@
 package cz.mendelu.xlinek.eduapp.api.test.record;
 
 import com.fasterxml.jackson.annotation.*;
-import cz.mendelu.xlinek.eduapp.api.test.Test;
 import cz.mendelu.xlinek.eduapp.api.test.answer.Answer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

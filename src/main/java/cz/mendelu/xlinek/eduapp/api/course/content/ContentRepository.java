@@ -8,7 +8,8 @@ import java.util.List;
 
 @Repository
 public interface ContentRepository extends JpaRepository<Content, Long> {
+    Content findById(long id);
+
     List<Content> findAllByCourse_IdOrderBySequence(long id);
     List<Content> findAllByCourse(Course course);
-    Content findById(long id);
 }

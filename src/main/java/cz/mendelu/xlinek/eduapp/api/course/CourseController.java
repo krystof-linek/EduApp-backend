@@ -16,8 +16,6 @@ public class CourseController {
     @Autowired
     CourseService courseService;
 
-
-
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     public List<Course> getAllCourses(){
@@ -313,11 +311,5 @@ public class CourseController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do have not permission!");
         if (status == -404)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found");
-    }
-
-    @GetMapping("/init")
-    @ResponseStatus(HttpStatus.OK)
-    public void initDB(){
-        courseService.initDB();
     }
 }

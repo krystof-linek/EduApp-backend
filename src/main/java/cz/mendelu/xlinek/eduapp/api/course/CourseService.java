@@ -466,33 +466,4 @@ public class CourseService {
         return contentRepository.findAllByCourse_IdOrderBySequence(idCourse);
     }
 
-    protected void initDB(){
-        if(contentTypeRepository.findAll().size() == 0){
-            contentTypeRepository.save(new ContentType("link"));
-            contentTypeRepository.save(new ContentType("list"));
-            contentTypeRepository.save(new ContentType("paragraph"));
-            contentTypeRepository.save(new ContentType("picture"));
-            contentTypeRepository.save(new ContentType("video"));
-        }
-    }
-    /*------ MAIN CONTENT ------*/
-
-    /**
-     * Funkce vytvori novy zaznamo o obsahu a priradi ho k prislusnemu kurzu.
-     * @param title nazev obsahu neni povinny
-     * @param description popisek obsahu neni povinny
-     * @param contentType typ obsahu
-     * @param course kurz, kteremu je prirazen
-     * @return vraci novy zaznam
-     */
-    private Content newContentMain(String title, String description, ContentType contentType, Course course){
-        int sequence = contentRepository.findAllByCourse(course).size() + 1;
-
-        return contentRepository.save(new Content(title, description, sequence, contentType, course));
-    }
-
-    //private ContentList new
-
-    /*------ CONTENT VIDEO ------*/
-
 }

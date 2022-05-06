@@ -9,6 +9,7 @@ import java.util.List;
 public interface CourseRepository extends JpaRepository<Course, Long> {
     Course findByTitleEquals(String title);
     Course findById(long id);
+
     List<Course> findAll();
     List<Course> findAllBySubject_IdSubjectOrderByTitle(long idSubject);
     List<Course> findAllByUserEmail(String email);
